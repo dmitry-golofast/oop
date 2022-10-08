@@ -1,30 +1,38 @@
-import { calcHealth, sortData } from '../func';
+const Character = require('../classes/character');
 
-test('calcHealth healthy', () => {
-    const man = {name: 'Маг', health: 90};
-    expect(calcHealth(man)).toBe('healthy');
+test('class Character', () => {
+    const zombies = new Character('Shon', 'Zombie');
+    expect(zombies).toEqual({
+            name: 'Shon',
+            type: 'Zombie',
+            health: 100,
+            level: 1,
+    });
 });
 
-test('calcHealth wounder', () => {
-    const man = {name: 'Маг', health: 50};
-    expect(calcHealth(man)).toBe('wounder');
+test('class Character error name', () => {
+    expect(() => new Character('Sh', 'Zombie')).toThrow('name Sh, min - 2 символа, max - 10');
 });
 
-test('calcHealth critical', () => {
-    const man = {name: 'Маг', health: 1};
-    expect(calcHealth(man)).toBe('critical');
+test('class Character error type', () => {
+    expect(() => new Character('Shon', 'Warrior')).toThrow('type Warrior не существует');
 });
 
-test('calcHealth healthy', () => {
-    const man = {name: 'Маг', health: undefined};
-    expect(calcHealth(man)).toBe(undefined);
+test('class Character error levelUp', () => {
+    const zombie3 = new Character('Shon', 'Zombie');
+    zombie3.health = -1;
+    expect(zombie3.levelUp()).toEqual('Нельзя повысить левел умершего');
 });
 
-test('sortData', () => {
-    const finData = [
-        {name: 'маг', health: 100},
-        {name: 'лучник', health: 80},
-        {name: 'мечник', health: 10},
-    ];
-    expect(sortData()).toEqual(finData);
+test('class Character levelUp', () => {
+    const zombie4 = new Character('Shon', 'Zombie');
+    zombie4.levelUp();
+    expect(zombie4.level).toEqual(2);
+});
+
+test('class Character damage', () => {
+    const zombie5 = new Character('Shon', 'Zombie');
+    zombie5.defence = 10;
+    zombie5.damage(50);
+    expect(zombie5.health).toEqual(55);
 });
